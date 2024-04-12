@@ -55,9 +55,19 @@ router.put("/:id", async (req, res) => {
         where: {
           id: req.params.id,
         },
+        returning: true,
       }
     );
-    res.status(200).json(updatedTag);
+    if (updatedCategory[0]) {
+      res.status(200).json({
+        message: "Updated tag name",
+        updated: updatedTag[1],
+      });
+    } else {
+      res.status(404).json({
+        message: "No tag found",
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
