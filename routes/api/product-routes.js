@@ -75,11 +75,17 @@ router.post("/", (req, res) => {
 // update product
 router.put("/:id", (req, res) => {
   // update product data
-  Product.update(req.body, {
-    where: {
-      id: req.params.id,
+  Product.update(
+    {
+      product_name: req.body.name,
     },
-  })
+    {
+      where: {
+        id: req.params.id,
+      },
+      returning: true,
+    }
+  )
     .then((product) => {
       if (req.body.tagIds && req.body.tagIds.length) {
         ProductTag.findAll({
@@ -108,7 +114,17 @@ router.put("/:id", (req, res) => {
         });
       }
 
-      return res.json(product);
+      if (product[0]) {
+        res.status(200).json({
+          message: "Updated Product name",
+          updated: product[1],
+        });
+      } else {
+        res.status(404).json({
+          message: "No Product found",
+        });
+      }
+      return;
     })
     .catch((err) => {
       // console.log(err);

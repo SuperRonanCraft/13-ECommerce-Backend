@@ -58,7 +58,7 @@ router.put("/:id", async (req, res) => {
         returning: true,
       }
     );
-    if (updatedCategory[0]) {
+    if (updatedTag[0]) {
       res.status(200).json({
         message: "Updated tag name",
         updated: updatedTag[1],
